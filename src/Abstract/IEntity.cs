@@ -28,7 +28,7 @@ public interface IEntity
     /// </summary>
     [JsonPropertyName("createdAt")]
     [JsonProperty("createdAt")]
-    DateTime CreatedAt { get; set; }
+    DateTimeOffset CreatedAt { get; set; }
 
     /// <summary>
     /// This field is meant to be changed to DateTime.UtcNow whenever the entity has changed. <para/>
@@ -37,5 +37,5 @@ public interface IEntity
     /// </summary>
     [JsonPropertyName("modifiedAt")]
     [JsonProperty("modifiedAt")]
-    DateTime? ModifiedAt { get; set; }
+    DateTimeOffset? ModifiedAt { get; set; }
 }

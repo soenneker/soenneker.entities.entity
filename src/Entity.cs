@@ -14,9 +14,9 @@ public class Entity : IEntity
 
     [JsonPropertyName("createdAt")]
     [JsonProperty("createdAt")]
-    public virtual DateTime CreatedAt { get; set; }
+    public virtual DateTimeOffset CreatedAt { get; set; }
 
     [JsonPropertyName("modifiedAt")]
     [JsonProperty("modifiedAt")]
-    public virtual DateTime? ModifiedAt { get; set; }
+    public virtual DateTimeOffset? ModifiedAt { get; set; }
 }
