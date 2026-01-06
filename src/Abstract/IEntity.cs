@@ -31,7 +31,7 @@ public interface IEntity
     DateTimeOffset CreatedAt { get; set; }
 
     /// <summary>
-    /// This field is meant to be changed to DateTime.UtcNow whenever the entity has changed. <para/>
+    /// This field is meant to be changed to DateTimeOffset.UtcNow whenever the entity has changed. <para/>
     /// If the child document has changed the parent's ModifiedAt should also be changed. <para/>
     /// If this entity has never been modified, this will be null (and not serialized)
     /// </summary>
