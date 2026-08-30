@@ -5,7 +5,7 @@
 
 # Soenneker.Entities.Entity
 
-The domain driven object at the heart of all operations. This derives from nothing. It mostly exists within the managers, and gets converted to/from a response in the coordinator. It CAN be converted into a document within the managers, but it's existence doesn't require it. It should be attempted to be the object where business logic is operated on, unless it's not pragmatic to adapt. Documentation should be on the Entity's interface properties, referencing them from the document object. Essentially provides only `Id`, `CreatedAt`, `ModifiedAt`.
+A small domain-entity contract and base class containing a string identifier plus creation and modification timestamps. It has no persistence-framework dependency.
 
 ## Install
 
@@ -13,18 +13,38 @@ The domain driven object at the heart of all operations. This derives from nothi
 dotnet add package Soenneker.Entities.Entity
 ```
 
-## What you get
+## Derive an entity
 
-- `IEntity` — The domain driven object at the heart of all operations. This derives from nothing. It mostly exists within the managers, and gets converted to/from a response in the coordinator. It CAN be converted into a document within the managers, but it's existence doesn't require it. It should be attempted to be the object where business logic is operated on, unless it's not pragmatic to adapt. Documentation should be on the Entity's interface properties, referencing them from the document object. Essentially provides only `Id`, `CreatedAt`, `ModifiedAt`.
+```csharp
+using Soenneker.Entities.Entity;
 
-## API at a glance
+public sealed class Order : Entity
+{
+    public required string CustomerId { get; set; }
+    public decimal Total { get; set; }
+}
 
-| API | What it does | Result / important behavior |
-| --- | --- | --- |
-| `IEntity.Id` | PartitionKey:DocumentId construction... Can be overriden. | unless Partition Key and Document Id are the same, then this should only be one GUID. |
-| `IEntity.CreatedAt` | This should only be set when creating the entity; it's never updated. | This should only be set when creating the entity; it's never updated. |
-| `IEntity.ModifiedAt` | This field is meant to be changed to DateTimeOffset.UtcNow whenever the entity has changed. If the child document has changed the parent's ModifiedAt should also be changed. If this entity has never been modified, this will be null (and not serialized). | This field is meant to be changed to DateTimeOffset.UtcNow whenever the entity has changed. If the child document has changed the parent's ModifiedAt should also be changed. If this entity has never been modified, this will be null (and not serialized). |
+var now = DateTimeOffset.UtcNow;
 
-## Important behavior
+var order = new Order
+{
+    Id = Guid.NewGuid().ToString("N"),
+    CustomerId = "customer-42",
+    Total = 125.00m,
+    CreatedAt = now
+};
 
-- `IEntity.Id`: unless Partition Key and Document Id are the same, then this should only be one GUID.
+order.Total = 140.00m;
+order.ModifiedAt = DateTimeOffset.UtcNow;
+```
+
+Use `IEntity` when a domain type already has another base class; derive from `Entity` when the supplied virtual properties are convenient.
+
+## Behavior
+
+- `Id` has no enforced format. A GUID, database identifier, or composite `partitionKey:documentId` string is an application convention.
+- `CreatedAt` defaults to `DateTimeOffset.MinValue` unless assigned.
+- `ModifiedAt` defaults to null.
+- The package does not generate identifiers, update timestamps, track changes, enforce optimistic concurrency, or map entities to database documents.
+
+The JSON property names are `id`, `createdAt`, and `modifiedAt` with both `System.Text.Json` and Newtonsoft.Json. Null omission is controlled by the serializer settings; `ModifiedAt = null` is not automatically omitted by this package.

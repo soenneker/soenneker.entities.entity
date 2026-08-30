@@ -5,36 +5,29 @@ using Newtonsoft.Json;
 namespace Soenneker.Entities.Entity.Abstract;
 
 /// <summary>
-/// The domain driven object at the heart of all operations. This derives from nothing. <para/>
-/// It mostly exists within the managers, and gets converted to/from a response in the coordinator. <para/>
-/// It CAN be converted into a document within the managers, but it's existence doesn't require it. <para/>
-/// It should be attempted to be the object where business logic is operated on, unless it's not pragmatic to adapt. <para/>
-/// Documentation should be on the Entity's interface properties, referencing them from the document object. <para/>
-/// Essentially provides only <see cref="Id"/>, <see cref="CreatedAt"/>, <see cref="ModifiedAt"/>
+/// Defines the identity and audit timestamps shared by domain entities.
 /// </summary>
 public interface IEntity
 {
     /// <summary>
-    /// PartitionKey:DocumentId construction... <para/>
-    /// Can be overriden.
+    /// Gets or sets the stable identifier assigned by the application.
     /// </summary>
-    /// <remarks>unless Partition Key and Document Id are the same, then this should only be one GUID</remarks>
+    /// <remarks>The contract does not enforce an identifier format. Applications may use a simple identifier or a composite convention such as <c>partitionKey:documentId</c>.</remarks>
     [JsonPropertyName("id")]
     [JsonProperty("id")]
     string Id { get; set; }
 
     /// <summary>
-    /// This should only be set when creating the entity; it's never updated
+    /// Gets or sets when the entity was created. The application is responsible for assigning and preserving this value.
     /// </summary>
     [JsonPropertyName("createdAt")]
     [JsonProperty("createdAt")]
     DateTimeOffset CreatedAt { get; set; }
 
     /// <summary>
-    /// This field is meant to be changed to DateTimeOffset.UtcNow whenever the entity has changed. <para/>
-    /// If the child document has changed the parent's ModifiedAt should also be changed. <para/>
-    /// If this entity has never been modified, this will be null (and not serialized)
+    /// Gets or sets when the entity was last changed, or <see langword="null"/> when it has not been modified.
     /// </summary>
+    /// <remarks>The contract does not update this value automatically. Null serialization follows the configured serializer options.</remarks>
     [JsonPropertyName("modifiedAt")]
     [JsonProperty("modifiedAt")]
     DateTimeOffset? ModifiedAt { get; set; }

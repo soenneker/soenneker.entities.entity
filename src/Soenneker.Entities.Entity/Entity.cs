@@ -5,7 +5,6 @@ using Soenneker.Entities.Entity.Abstract;
 
 namespace Soenneker.Entities.Entity;
 
-/// <inheritdoc cref="IEntity"/>
 public class Entity : IEntity
 {
     [JsonPropertyName("id")]
