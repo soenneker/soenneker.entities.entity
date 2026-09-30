@@ -47,4 +47,4 @@ Use `IEntity` when a domain type already has another base class; derive from `En
 - `ModifiedAt` defaults to null.
 - The package does not generate identifiers, update timestamps, track changes, enforce optimistic concurrency, or map entities to database documents.
 
-The JSON property names are `id`, `createdAt`, and `modifiedAt` with both `System.Text.Json` and Newtonsoft.Json. Null omission is controlled by the serializer settings; `ModifiedAt = null` is not automatically omitted by this package.
+The JSON property names are `id`, `createdAt`, and `modifiedAt` with `System.Text.Json`. Null omission is controlled by the serializer settings; `ModifiedAt = null` is not automatically omitted by this package.

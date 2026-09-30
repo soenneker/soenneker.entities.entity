@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Text.Json.Serialization;
-using Newtonsoft.Json;
 
 namespace Soenneker.Entities.Entity.Abstract;
 
@@ -14,14 +13,12 @@ public interface IEntity
     /// </summary>
     /// <remarks>The contract does not enforce an identifier format. Applications may use a simple identifier or a composite convention such as <c>partitionKey:documentId</c>.</remarks>
     [JsonPropertyName("id")]
-    [JsonProperty("id")]
     string Id { get; set; }
 
     /// <summary>
     /// Gets or sets when the entity was created. The application is responsible for assigning and preserving this value.
     /// </summary>
     [JsonPropertyName("createdAt")]
-    [JsonProperty("createdAt")]
     DateTimeOffset CreatedAt { get; set; }
 
     /// <summary>
@@ -29,6 +26,5 @@ public interface IEntity
     /// </summary>
     /// <remarks>The contract does not update this value automatically. Null serialization follows the configured serializer options.</remarks>
     [JsonPropertyName("modifiedAt")]
-    [JsonProperty("modifiedAt")]
     DateTimeOffset? ModifiedAt { get; set; }
 }
